@@ -1,6 +1,6 @@
 """ Minimal Flask app"""
 
-from flask import Flask
+from flask import Flask, render_template
 
 # make application
 app = Flask(__name__)
@@ -10,4 +10,11 @@ app = Flask(__name__)
 
 # define function
 def hello():
-    return 'hello'
+    return render_template("home.html")
+
+# another route
+@app.route("/about")
+
+# another function
+def another():
+    return render_template("page.html")
