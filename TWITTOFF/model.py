@@ -1,11 +1,14 @@
-""" database models """
+""" Create database model/tables """
 
 from flask_sqlalchemy import SQLAlchemy
 
 DB = SQLAlchemy()
 
-# # databases that store info from (or in?) Twitter
-# # 2 tables
+# structure for database that store info from (or in?) Twitter
+
+# created using DB.create_all()
+# ^ should give me empty db.sqlite3
+# after this: add data into database (DB.session.add(x))
 
 class User(DB.Model):
     """ Twitter users that we analyze, creating table """
