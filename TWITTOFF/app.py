@@ -1,7 +1,8 @@
-""" Function for __init__, build app factory and do routes/config """
+""" Function for __init__, build app factory and create routes/config """
 
-from flask import Flask
-from .model import DB
+from decouple import config
+from flask import Flask, render_template, request
+from .model import DB, User
 # add the . because it's in the same folder
 
 # app works without this, but..?
@@ -11,19 +12,24 @@ from .model import DB
 def create_app():
     app = Flask(__name__) # template_folder='mytemplatepath'
     
-    # add configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+    # add configuration to create sqlite3 database! (add config to database)
+    app.config['SQLALCHEMY_DATABASE_URI'] = config('DATABASE_URL') # instead of 'sqlite:///db.sqlite3' (more flexible; global variable)
+    # or os.environ["DATABASE_URI"]
     
-    # link database to app
+    # to remove umm, idk what this means
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # link database to app (have database "find out" about app)
     DB.init_app(app)
 
     @app.route("/")
     def root():
-        return 'Testing, testing'
-        
+        users = User.query.all()
+        return render_template('base.html', title='Home', users=users)
     return app
 
-# FLASK_APP=TWITTOFF:APP flask run / shell
+# FLASK_APP=TWITTOFF:APP flask shell to open interpreter
+# instead of FLASK_APP=hello.py flask run for app on web
 
 
 

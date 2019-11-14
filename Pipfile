@@ -7,15 +7,15 @@ verify_ssl = true
 
 [packages]
 flask = "*"
-python-decouple = "*"
 jinja2 = "*"
-basilica = "*"
-tweepy = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
 scikit-learn = "*"
 python-dotenv = "*"
 redis = "*"
+tweepy = "*"
+python-decouple = "*"
+basilica = "*"
 flask-sqlalchemy = "*"
 
 [requires]
