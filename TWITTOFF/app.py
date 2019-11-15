@@ -12,6 +12,10 @@ from .model import DB, User
 def create_app():
     app = Flask(__name__) # template_folder='mytemplatepath'
     
+
+    # IMPORTANT: Heroku knows your schema because config('DATABASE_URL') has
+    # is linked to database and we have imported DB, User from model.py
+
     # add configuration to create sqlite3 database! (add config to database)
     app.config['SQLALCHEMY_DATABASE_URI'] = config('DATABASE_URL') # instead of 'sqlite:///db.sqlite3' (more flexible; global variable)
     # or os.environ["DATABASE_URI"]
@@ -26,6 +30,15 @@ def create_app():
     def root():
         users = User.query.all()
         return render_template('base.html', title='Home', users=users)
+
+    # type /reset to reset database for you
+    # from within the Flask app (without having to delete from flask shell)
+    @app.route("/reset")
+    def reset():
+        DB.drop_all()
+        DB.create_all()
+        # delete, create then return template with same base template
+        return render_template('base.html', title='Reset', users=[])
     return app
 
 # FLASK_APP=TWITTOFF:APP flask shell to open interpreter

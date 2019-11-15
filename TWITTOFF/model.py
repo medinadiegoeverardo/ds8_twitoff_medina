@@ -13,7 +13,7 @@ DB = SQLAlchemy()
 class User(DB.Model):
     """ Twitter users that we analyze, creating table """
 
-    id = DB.Column(DB.Integer, primary_key=True)
+    id = DB.Column(DB.BigInteger, primary_key=True) # delete database to replace Integer to BigInteger
     name = DB.Column(DB.String(15), nullable=False) # cannot be null (required)
     newest_tweet_id = DB.Column(DB.BigInteger) # not necessary but to keep track of newest tweet
 
@@ -23,12 +23,15 @@ class User(DB.Model):
 
 class Tweet(DB.Model):
     """ Users' tweets from Twitter """
-    id = DB.Column(DB.Integer, primary_key=True)
+    id = DB.Column(DB.BigInteger, primary_key=True)
     text = DB.Column(DB.Unicode(300))
-    user_id = DB.Column(DB.Integer, DB.ForeignKey('user.id'), nullable=False) # cannot be null (required)
+    user_id = DB.Column(DB.BigInteger, DB.ForeignKey('user.id'), nullable=False) # cannot be null (required)
     user = DB.relationship('User', backref=DB.backref('tweets', lazy=True)) # back reference it. relationship to user
     # user_id and user are to have that one to many relationship between users and tweets
     
+    # storing embedding in database - pickle is standard for serializing
+    embedding = DB.Column(DB.PickleType, nullable=False) # PickleType is a new type
+
     # formatting
     def __repr__(self):
         return '<Tweet {}>'.format(self.text)
